@@ -9,6 +9,8 @@ const Game: React.FC = () => {
   const [history, setHistory] = useState<number[][]>([])
   const [selectedIndices, setSelectedIndices] = useState<number[]>([])
   const [selectedOperator, setSelectedOperator] = useState<string>("")
+  const [timeElapsed, setTimeElapsed] = useState<number>(0)
+  const [timerActive, setTimerActive] = useState<boolean>(true)
   
   const [passed, setPassed] = useState<boolean>(false)
 
@@ -27,7 +29,6 @@ const Game: React.FC = () => {
 
   const handleOperatorClick = (op: string) => {
     if (passed) return
-
     setSelectedOperator(op)
   }
 
@@ -46,10 +47,33 @@ const Game: React.FC = () => {
     setSelectedIndices([])
     setSelectedOperator("")
     setPassed(false)
+    setTimerActive(true)
   }
 
   const handleShare = () => {
     console.log("Sharing Results")
+    const message = `I just played Daily 24 and got to 24 in ${timeElapsed} seconds! Can you beat my time?`
+    const url = window.location.href
+
+    if (navigator.share) {
+      navigator.share({
+        title: "Daily 24 Game",
+        text: message,
+        url: url
+      }).catch((error) => {
+        console.error("Error sharing:", error)
+        alert("Failed to share. Please try copying the link manually.")
+      })
+    } else {
+      navigator.clipboard.writeText(message + " " + url)
+        .then(() => {
+          alert("Results copied to clipboard! Share it with your friends.")
+        })
+        .catch((error) => {
+          console.error("Error copying to clipboard:", error)
+          alert("Failed to copy results. Please try again.")
+        })
+    }
   }
 
   useEffect(() => {
@@ -64,7 +88,7 @@ const Game: React.FC = () => {
         case "-": result = n1 - n2; break
         case "×": result = n1 * n2; break
         case "÷":
-          if (n2 === 0 || n1 % n2 !== 0) return
+          if (n2 === 0) return
           result = n1 / n2
           break
         default: return
@@ -81,16 +105,36 @@ const Game: React.FC = () => {
       setSelectedIndices([])
       setSelectedOperator("")
 
-      if (newNumbers.length === 1 && newNumbers[0] === 24) {
+      if (newNumbers.length === 1) {
         confetti({
           particleCount: 600,
           spread: 160,
           origin: { y: 0.6 },
         })
         setPassed(true)
+        setTimerActive(false)
       }
     }
   }, [selectedIndices, selectedOperator, numbers])
+
+  useEffect(() => {
+    if (timerActive) {
+      const timer = setInterval(() => {
+        setTimeElapsed(prev => prev + 1)
+      }, 1000)
+
+      return () => clearInterval(timer)
+    }
+  }, [timerActive])
+
+  const getDateString = () => {
+    const today = new Date()
+    const day = today.getDate()
+    const month = today.getMonth() + 1
+    const year = today.getFullYear()
+
+    return `${month}/${day}/${year}`
+  }
 
   return (
     <div className="game-container">
@@ -103,6 +147,8 @@ const Game: React.FC = () => {
           <h1>Get to 24!</h1>
         </>
       )}
+      <p>📅 Puzzle for: {getDateString()}</p>
+      <p>⏱️ Time: {timeElapsed}</p>
 
       <div className="number-row">
         {numbers.map((num, idx) => (
