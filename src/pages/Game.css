@@ -4,11 +4,16 @@
 }
 
 .number-row,
-.operator-row {
+.operator-row,
+.control-row {
   display: flex;
   justify-content: center;
   gap: 1rem;
   margin-bottom: 1rem;
+}
+
+h1 {
+  color: #4a4a4a;
 }
 
 button {
@@ -26,10 +31,21 @@ button:hover {
 }
 
 button.selected {
-  background-color: #064d7a;
+  background-color: #0969a4;
   border-color: #1c90f3;
 }
 
 button:focus {
   outline: none;
+}
+
+.control-row button {
+  font-size: 1.2rem;
+  padding: 0.75rem 1.25rem;
+  background-color: #b0a990;
+  border-color: #444;
+}
+
+.control-row button:hover {
+  background-color: #a9b5d1;
 }
