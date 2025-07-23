@@ -1,2 +1,3 @@
-# Daily-24
-Solve the 24 puzzle with a new puzzle every day!
+# Daily 24
+
+Play the 24 game and share your score with friends! A new level each day!
