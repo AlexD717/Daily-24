@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import "./Game.css"
+import confetti from "canvas-confetti"
 
 const Game: React.FC = () => {
   const initialNumbers = [4, 7, 1, 2]
@@ -8,8 +9,12 @@ const Game: React.FC = () => {
   const [history, setHistory] = useState<number[][]>([])
   const [selectedIndices, setSelectedIndices] = useState<number[]>([])
   const [selectedOperator, setSelectedOperator] = useState<string>("")
+  
+  const [passed, setPassed] = useState<boolean>(false)
 
   const handleNumberClick = (index: number) => {
+    if (passed) return
+
     if (selectedIndices.includes(index)) {
       setSelectedIndices(selectedIndices.filter(i => i !== index))
     } else if (selectedIndices.length >= 2) {
@@ -21,6 +26,8 @@ const Game: React.FC = () => {
   }
 
   const handleOperatorClick = (op: string) => {
+    if (passed) return
+
     setSelectedOperator(op)
   }
 
@@ -38,6 +45,11 @@ const Game: React.FC = () => {
     setHistory([])
     setSelectedIndices([])
     setSelectedOperator("")
+    setPassed(false)
+  }
+
+  const handleShare = () => {
+    console.log("Sharing Results")
   }
 
   useEffect(() => {
@@ -70,14 +82,27 @@ const Game: React.FC = () => {
       setSelectedOperator("")
 
       if (newNumbers.length === 1 && newNumbers[0] === 24) {
-        alert("Congratulations! You reached 24!")
+        confetti({
+          particleCount: 600,
+          spread: 160,
+          origin: { y: 0.6 },
+        })
+        setPassed(true)
       }
     }
   }, [selectedIndices, selectedOperator, numbers])
 
   return (
     <div className="game-container">
-      <h1>Get to 24!</h1>
+      {passed ? (
+        <>
+          <h1>Congratulations!</h1>
+        </>
+      ) : (
+        <>
+          <h1>Get to 24!</h1>
+        </>
+      )}
 
       <div className="number-row">
         {numbers.map((num, idx) => (
@@ -106,8 +131,16 @@ const Game: React.FC = () => {
       </div>
 
       <div className="control-row">
-        <button onClick={handleUndo}>Undo</button>
-        <button onClick={handleRestart}>Restart</button>
+          {passed ? (
+            <>
+              <button onClick={handleShare}>Share</button>
+            </>
+          ) : (
+            <>
+              <button onClick={handleUndo}>Undo</button>
+              <button onClick={handleRestart}>Restart</button>
+            </>
+          )}
       </div>
     </div>
   )
