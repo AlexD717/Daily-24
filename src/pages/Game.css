@@ -12,6 +12,13 @@
   margin-bottom: 1rem;
 }
 
+p {
+  font-size: 1.2rem;
+  color: #4a4a4a;
+  margin: 0.3rem 0;
+  user-select: none;
+}
+
 h1 {
   color: #4a4a4a;
   margin-bottom: 1rem;
@@ -27,6 +34,7 @@ button {
   background-color: #868379;
   cursor: pointer;
   transition: 0.2s ease;
+  user-select: none;
 }
 
 button:hover {
@@ -51,4 +59,8 @@ button:focus {
 
 .control-row button:hover {
   background-color: #a9b5d1;
+}
+
+.puzzle-info {
+  margin-bottom: 1rem;
 }
