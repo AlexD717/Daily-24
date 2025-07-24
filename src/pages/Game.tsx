@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react"
 import "./Game.css"
 import confetti from "canvas-confetti"
+import { getTodaysPuzzle } from "../systems/PuzzleGiver"
 
 const Game: React.FC = () => {
-  const initialNumbers = [4, 7, 1, 2]
+  const puzzle = getTodaysPuzzle()
+  const initialNumbers = puzzle.numbers
 
   const [numbers, setNumbers] = useState<number[]>(initialNumbers)
   const [history, setHistory] = useState<number[][]>([])
@@ -105,7 +107,7 @@ const Game: React.FC = () => {
       setSelectedIndices([])
       setSelectedOperator("")
 
-      if (newNumbers.length === 1) {
+      if (newNumbers.length === 1 && newNumbers[0] === 24) {
         confetti({
           particleCount: 600,
           spread: 160,
@@ -147,8 +149,11 @@ const Game: React.FC = () => {
           <h1>Get to 24!</h1>
         </>
       )}
-      <p>📅 Puzzle for: {getDateString()}</p>
-      <p>⏱️ Time: {timeElapsed}</p>
+      <div className="puzzle-info">
+        <p>📅 Puzzle for: {getDateString()}</p>
+        <p>💡 Difficulty: {puzzle.difficulty}</p>
+        <p>⏱️ Time: {timeElapsed}</p>
+      </div>
 
       <div className="number-row">
         {numbers.map((num, idx) => (
