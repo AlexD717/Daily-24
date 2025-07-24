@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import "./Game.css"
 import confetti from "canvas-confetti"
 import { getTodaysPuzzle } from "../systems/PuzzleGiver"
+import { motion } from "framer-motion"
 
 const Game: React.FC = () => {
   const puzzle = getTodaysPuzzle()
@@ -140,6 +141,11 @@ const Game: React.FC = () => {
 
   return (
     <div className="game-container">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
       {passed ? (
         <>
           <h1>Congratulations!</h1>
@@ -149,12 +155,24 @@ const Game: React.FC = () => {
           <h1>Get to 24!</h1>
         </>
       )}
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
       <div className="puzzle-info">
         <p>📅 Puzzle for: {getDateString()}</p>
         <p>💡 Difficulty: {puzzle.difficulty}</p>
         <p>⏱️ Time: {timeElapsed}</p>
       </div>
+      </motion.div>
 
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      >
       <div className="number-row">
         {numbers.map((num, idx) => (
           <button
@@ -168,7 +186,13 @@ const Game: React.FC = () => {
           </button>
         ))}
       </div>
-
+      </motion.div>
+      
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 1.1 }}
+      >
       <div className="operator-row">
         {["+", "-", "×", "÷"].map((op) => (
           <button
@@ -180,7 +204,13 @@ const Game: React.FC = () => {
           </button>
         ))}
       </div>
+      </motion.div>
 
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 1.4 }}
+      >
       <div className="control-row">
           {passed ? (
             <>
@@ -193,6 +223,7 @@ const Game: React.FC = () => {
             </>
           )}
       </div>
+      </motion.div>
     </div>
   )
 }
