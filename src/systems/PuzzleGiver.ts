@@ -22,9 +22,13 @@ const dailyPuzzles: Puzzle[] = [
   { numbers: [3, 3, 7, 7], difficulty: "Expert" },
 ]
 
+function getLocalDate(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+}
+
 export function getTodaysPuzzle(): Puzzle {
-  const launchDate = new Date("2025-07-23")
-  const today = new Date()
+  const launchDate = getLocalDate(new Date("2025-07-23"))
+  const today = new Date(getLocalDate(new Date()))
   const daysSinceLaunch = Math.floor((today.getTime() - launchDate.getTime()) / (1000 * 60 * 60 * 24))
 
   const index = daysSinceLaunch % dailyPuzzles.length
